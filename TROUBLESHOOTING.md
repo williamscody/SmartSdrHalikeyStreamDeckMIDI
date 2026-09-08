@@ -22,7 +22,7 @@ pgrep -x routemidi
 If it prints no process ID, start the route manually:
 
 ```bash
-/opt/homebrew/bin/routemidi in "HaliKey MIDI" out "IAC Driver Bus 2"
+/opt/homebrew/bin/routemidi in "HaliKey MIDI" in "IAC Driver Bus 1" out "IAC Driver Bus 2"
 ```
 
 If that reports a missing port, inspect the available names:
@@ -94,7 +94,7 @@ The current [HaliKey User Guide](https://halibut-electronics.github.io/HaliKey/U
 This project intentionally does not use `vout`. RouteMIDI virtual ports are legitimate features, but the proven SmartSDR configuration uses macOS IAC buses and selects **IAC Driver** in SmartSDR. Use:
 
 ```bash
-routemidi in "HaliKey MIDI" out "IAC Driver Bus 2"
+routemidi in "HaliKey MIDI" in "IAC Driver Bus 1" out "IAC Driver Bus 2"
 ```
 
 ## Uninstall or revert

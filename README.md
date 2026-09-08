@@ -1,6 +1,6 @@
 # SmartSDR for Mac + HaliKey MIDI + Stream Deck+
 
-Use a HaliKey MIDI keyer and a Stream Deck+ together with SmartSDR for Mac by routing each source through a separate macOS IAC bus.
+Use a HaliKey MIDI keyer and a Stream Deck+ together with SmartSDR for Mac by routing each source through a separate macOS IAC bus. The included launcher now uses the merged route also verified with AetherSDR for Mac, so one startup application satisfies both radios.
 
 This is a tested, practical configuration for a Mac where the Stream Deck+ is already sending MIDI to `IAC Driver Bus 1`. It adds HaliKey MIDI on `IAC Driver Bus 2` without changing the Stream Deck configuration.
 
@@ -9,17 +9,14 @@ This is a tested, practical configuration for a Mac where the Stream Deck+ is al
 ## Architecture
 
 ```text
-Stream Deck+ ──────────────────> IAC Driver Bus 1 ─┐
-                                                    │
-                                                    v
-                                             SmartSDR for Mac
-                                             MIDI device: IAC Driver
-                                                    ^
-                                                    │
-HaliKey MIDI ─> RouteMIDI ─> IAC Driver Bus 2 ─────┘
+HaliKey MIDI ───────────┐
+                        ├── RouteMIDI ──→ IAC Driver Bus 2 ──→ AetherSDR
+Stream Deck+ → Bus 1 ───┘                                      (Bus 2)
+       │
+       └──────────────────────────→ SmartSDR for Mac (IAC Driver)
 ```
 
-`IAC Driver Bus 1` remains the Stream Deck+ destination. RouteMIDI forwards the HaliKey’s messages to `IAC Driver Bus 2`. macOS presents both buses under the IAC Driver device that SmartSDR uses.
+`IAC Driver Bus 1` remains the Stream Deck+ destination. RouteMIDI merges HaliKey MIDI and Bus 1 into `IAC Driver Bus 2`. macOS presents both buses under the IAC Driver device that SmartSDR uses, while AetherSDR receives the merged traffic on Bus 2.
 
 ## What this solves
 
@@ -34,13 +31,13 @@ It is specifically for **HaliKey MIDI**, not HaliKey Serial.
    - `Bus 2` for HaliKey MIDI
 2. Keep the Stream Deck+ MIDI destination set to **IAC Driver Bus 1**.
 3. In SmartSDR for Mac, select **IAC Driver** as the MIDI device.
-4. Install RouteMIDI and start this exact route:
+4. Install RouteMIDI and start this exact merged route:
 
    ```bash
-   routemidi in "HaliKey MIDI" out "IAC Driver Bus 2"
+   routemidi in "HaliKey MIDI" in "IAC Driver Bus 1" out "IAC Driver Bus 2"
    ```
 
-5. Use the included background AppleScript application to launch that route automatically, without a Terminal window.
+5. Use the included background AppleScript application to launch that route automatically, without a Terminal window. It supports both SmartSDR for Mac and AetherSDR for Mac.
 
 See [INSTALL.md](INSTALL.md) for the complete procedure and [TROUBLESHOOTING.md](TROUBLESHOOTING.md) if a controller does not respond.
 
@@ -73,9 +70,9 @@ This arrangement was functionally tested with:
 - HaliKey MIDI
 - Stream Deck+
 - RouteMIDI 0.9.10
-- RouteMIDI command: `routemidi in "HaliKey MIDI" out "IAC Driver Bus 2"`
+- RouteMIDI command: `routemidi in "HaliKey MIDI" in "IAC Driver Bus 1" out "IAC Driver Bus 2"`
 
-The test verified that HaliKey events routed to Bus 2 and Stream Deck+ events on Bus 1 both controlled SmartSDR. Hardware, macOS, SmartSDR, Stream Deck plug-in, and RouteMIDI releases can change; retest after major updates.
+The test verified that HaliKey and Stream Deck+ events controlled both SmartSDR for Mac and AetherSDR for Mac. Hardware, macOS, radio software, Stream Deck plug-in, and RouteMIDI releases can change; retest after major updates.
 
 ## References
 

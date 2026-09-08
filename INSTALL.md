@@ -57,13 +57,13 @@ If `which routemidi` reports another path, update the AppleScript before saving 
 
 ## 4. Start the HaliKey route
 
-For an initial test, run:
+For an initial test, run the merged route:
 
 ```bash
-routemidi in "HaliKey MIDI" out "IAC Driver Bus 2"
+routemidi in "HaliKey MIDI" in "IAC Driver Bus 1" out "IAC Driver Bus 2"
 ```
 
-RouteMIDI remains running while it forwards MIDI. Leave the command running for this test, then operate a HaliKey paddle and an assigned Stream Deck+ control.
+RouteMIDI remains running while it forwards MIDI. Leave the command running for this test, then operate a HaliKey paddle and an assigned Stream Deck+ control. This one route and the included launcher satisfy both SmartSDR for Mac and AetherSDR for Mac.
 
 If RouteMIDI cannot find a port, run `routemidi list` and use the names it reports. RouteMIDI supports case-insensitive substring matching, but exact displayed names make troubleshooting clearer.
 
@@ -78,6 +78,8 @@ IAC Driver
 Do **not** select `IAC Driver Bus 1` or `IAC Driver Bus 2` here if SmartSDR offers the parent device. The proven configuration selects the parent **IAC Driver** device, which receives traffic from both buses.
 
 For HaliKey mappings, use SmartSDR’s MIDI mapping editor to map Button codes 20, 21, and 31 to CW left paddle, CW right paddle, and PTT Push respectively. Refer to the [HaliKey User Guide](https://halibut-electronics.github.io/HaliKey/User%20Guide.pdf) for its current product guidance.
+
+For AetherSDR for Mac, select `IAC Driver Bus 2` as its MIDI device. It receives both HaliKey and Stream Deck+ messages there because RouteMIDI merges Bus 1 with HaliKey MIDI.
 
 ## 6. Create the no-Terminal-window launcher
 
