@@ -1,4 +1,4 @@
-# SmartSDR for Mac + HaliKey MIDI + Stream Deck+
+# SmartSDR for Mac + HaliKey MIDI + Stream Deck+ (or Stream Deck)
 
 Use a HaliKey MIDI keyer and a Stream Deck+ together with SmartSDR for Mac by routing each source through a separate macOS IAC bus. The included launcher now uses the merged route also verified with AetherSDR for Mac, so one startup application satisfies both radios.
 
